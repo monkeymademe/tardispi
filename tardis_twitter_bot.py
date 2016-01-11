@@ -36,9 +36,9 @@ def replywithtext(tweetdata, msg):
                 print "tweet not sent. Too long. 140 chars Max."
 
 def replywithpic(tweetdata, status):
-	if status == 'turned-on':
+	if status == 'on':
 		msg = '@%s Lights, camera, action! Current Tardis time is: %s' % (tweetdata['username'], tweetdata['date'])
-	if status == 'turned-off':
+	if status == 'off':
 		msg = '@%s Lightsout time for sleep! Current Tardis time is: %s' % (tweetdata['username'], tweetdata['date'])
 	file = 'tweetthis.jpg'
         if len(msg) <= 140:
@@ -58,22 +58,27 @@ class StdOutListener(StreamListener):
  		# ----- do something
 		tweetdata = parsetweet(tweet)
 		if "#tardislightson" in tweetdata['text']:
-			status = "turned-on"
-			explorerhat.motor.backwards(100)
-			takeshot()
-			replywithpic(tweetdata, status)
-		 	tardisstats = tweetdata
-			tardisstats['status'] = status
+			if "#tardislightsoff" in tweetdata['text']:
+				msg = '@%s stop confusing me... Lights off, lights on... Make up your mind!' % tweetdata['username']
+                        	replywithtext(tweetdata, msg)
+			else:
+				status = "on"
+				explorerhat.motor.backwards(100)
+				takeshot()
+				replywithpic(tweetdata, status)
+		 		tardisstats = tweetdata
+				tardisstats['status'] = status
                 if "#tardislightsoff" in tweetdata['text']:
-			status = "turned-off"
-                	explorerhat.motor.backwards(0)
-			takeshot()
-			replywithpic(tweetdata, status)
-			tardisstats = tweetdata
-                       	tardisstats['status'] = status
-		if "#tardisligthson" and "#tardislightsoff" in tweetdata['text']:
-			msg = '@%s stop confusing me... Lights off, lights on... Make up your mind!' % tweetdata['username']
-			replywithtext(tweetdata, msg)
+			if "#tardislightson" in tweetdata['text']:
+                                msg = '@%s stop confusing me... Lights off, lights on... Make up your mind!' % tweetdata['username']
+                                replywithtext(tweetdata, msg)
+                        else:
+				status = "off"
+                		explorerhat.motor.backwards(0)
+				takeshot()
+				replywithpic(tweetdata, status)
+				tardisstats = tweetdata
+                       		tardisstats['status'] = status
 		if "#tardisstatus" in tweetdata['text']:
 			msg = '@%s I was last turned %s by %s at %s' % (tweetdata['username'], tardisstats['status'], tardisstats['username'], tardisstats['date'])
 			replywithtext(tweetdata, msg) 
