@@ -8,6 +8,8 @@ import picamera
 import sys, subprocess, urllib, time, tweepy, json, datetime
 import config
 
+tardisstats = 0
+
 def takeshot():
 	with picamera.PiCamera() as camera:
 		camera.resolution = (1024, 768)
@@ -48,30 +50,31 @@ class StdOutListener(StreamListener):
 	
         def on_data(self, data):
 		tweet = json.loads(data)
+		global tardisstats 
 		# Print Usernam[Be 
 		print(tweet['user']['name']).encode('utf-8')
 		# Print Text from tweet *note* encode is used because of speical charaters causing exception
 		print(tweet['text']).encode('utf-8')
  		# ----- do something
 		tweetdata = parsetweet(tweet)
-		if "#tardislightson" and not "#tardislightsoff" in tweetdata['text']:
+		if "#tardislightson" in tweetdata['text']:
 			status = "turned-on"
 			explorerhat.motor.backwards(100)
 			takeshot()
 			replywithpic(tweetdata, status)
-			tardisstats = tweetdata
+		 	tardisstats = tweetdata
 			tardisstats['status'] = status
-                if "#tardislightsoff" and not "#tardislightson" in tweetdata['text']:
+                if "#tardislightsoff" in tweetdata['text']:
 			status = "turned-off"
                 	explorerhat.motor.backwards(0)
 			takeshot()
 			replywithpic(tweetdata, status)
 			tardisstats = tweetdata
-                        tardisstats['status'] = status
-		if "#tardisligthson" and "#tardislightsoff" in tweetdata['text']:
-			msg = '@%s stop confusing me... Lights off, lights on... Make up your mind!' % tweetdata['username']
-			replywithtext(tweetdata, msg)
-		if "#tardisstatus" and not "#tardislightsoff" and not "#tardislightson" in tweetdata['text']:
+                       	tardisstats['status'] = status
+		#if "tardisligthson" and "tardislightsoff" in tweetdata['text']:
+		#	msg = '@%s stop confusing me... Lights off, lights on... Make up your mind!' % tweetdata['username']
+		#	replywithtext(tweetdata, msg)
+		if "#tardisstatus" in tweetdata['text']:
 			msg = '@%s I was last turned %s by %s at %s' % (tweetdata['username'], tardisstats['status'], tardisstats['username'], tardisstats['date'])
 			replywithtext(tweetdata, msg) 
         	return True
@@ -94,5 +97,5 @@ if __name__ == '__main__':
 	# Start Stream Tracking
     	stream = Stream(auth, l)
 	#user = ["robinjamberlin"]
-	keywords = ["#tardislightson", "#tardislightsoff", "#tardisstatus"]
+	keywords = ["#tardislightson", "#tardislightsoff", "#tardisstatus", "#testtestest"]
     	stream.filter(track=keywords)
