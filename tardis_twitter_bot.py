@@ -71,7 +71,7 @@ class StdOutListener(StreamListener):
 		if "#tardisligthson" and "#tardislightsoff" in tweetdata['text']:
 			msg = '@%s stop confusing me... Lights off, lights on... Make up your mind!' % tweetdata['username']
 			replywithtext(tweetdata, msg)
-		if "#tardisstatus" and "#tardislightsoff" and "#tardislightson" in tweetdata['text']:
+		if "#tardisstatus" and not "#tardislightsoff" and not "#tardislightson" in tweetdata['text']:
 			msg = '@%s I was last turned %s by %s at %s' % (tweetdata['username'], tardisstats['status'], tardisstats['username'], tardisstats['date'])
 			replywithtext(tweetdata, msg) 
         	return True
