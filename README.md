@@ -10,17 +10,15 @@ So all you need to do is cut paint and glue.
 
 ## Project Tweeting Tardis
 
-First project was to turn lights inside the tardis on and off on twitter commands. Tweepy is installed on the pi and its streaming looking for the following keywords '#tardislightson' '#tardislightsoff' and '#tardisstatus'. The Pi also have a Pimoroni exploere hat pro with some small LED chirstmas tree lights connect to the motor h bridge... The idea is that I can control the brightness using the explorerhat.motor.forwards(x)
+Tweepy is installed on the pi and its looking for the following keyword '#spintardis'.
 
-### #tardislightsoff
-This will turn off the lights and the pi will take a picture of the tradis and replies with the picture
+The Pi has a Pimoroni explorer hat pro, Adafruit LED ring and a small motor connected to it.
 
-### #tardislightson
-This will turn on the lights and the pi will take a picture of the tradis and replies with the picture
+When the user tweets '#spintardis' the tardis where ever it is connected and running will spin with the LED's making the base glow.
 
-### #tardisstatus
-This will reply to the tweet with the information on the tardis. What is the light status on/off and also who made the last action with the time when it happened.
+In addtion to the spinning the tardis also replies to the person tweeting with 1 of 5 images and a little text from the tardis.
 
+Finally using the explorer hat pro there is a button connected to one of the input pin's allowing for the user who might be phyiscally there to press and make the tardis spin (good for no internet situations, of course it wont tweet then).
 
 
 
